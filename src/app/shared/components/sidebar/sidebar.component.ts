@@ -1,9 +1,10 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { GrammarService } from '../../../core/services/grammar.service';
+import { ModuleService } from '../../../core/services/module.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-sidebar',
@@ -29,24 +30,21 @@ import { Router } from '@angular/router';
         </a>
 
         <div class="mt-4 mb-2">
-          <p class="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4">Core Modules</p>
+          <p class="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4 italic">Active Modules</p>
         </div>
 
-        <!-- Dynamic Loop for Reading, Writing, Listening, Speaking -->
-        <div *ngFor="let category of categories" class="flex flex-col gap-1 mb-2">
-          <a [routerLink]="['/modules', category.slug]" routerLinkActive="active" class="sidebar-nav-item">
-            <span class="p-2 rounded-lg bg-slate-100/50 transition-colors icon-container">
-              <ng-container [ngSwitch]="category.slug.toLowerCase()">
-                <svg *ngSwitchCase="'reading'" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
-                <svg *ngSwitchCase="'writing'" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
-                <svg *ngSwitchCase="'listening'" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15L4 14a1 1 0 010-2l1.586-1L7 10h4l3-3v10l-3-3H7l-1.414-1z"></path></svg>
-                <svg *ngSwitchCase="'speaking'" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path></svg>
-                <svg *ngSwitchDefault class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 19a2 2 0 01-2-2V7a2 2 0 012-2h4l2 2h4a2 2 0 012 2v1M5 19h14a2 2 0 002-2v-5a2 2 0 00-2-2H9l-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
-              </ng-container>
+        <!-- Dynamic Loop for Real-time Modules -->
+        <div *ngFor="let m of modules" class="flex flex-col gap-1 mb-2 group">
+          <a [routerLink]="['/modules', m.id]" routerLinkActive="active" class="sidebar-nav-item">
+            <span class="p-2 rounded-lg bg-slate-50 transition-colors icon-container group-hover:bg-primary group-hover:text-white">
+               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path></svg>
             </span>
-            <span>{{category.name}}</span>
+            <span class="truncate">{{m.name}}</span>
           </a>
-          
+        </div>
+
+        <div *ngIf="modules.length === 0" class="p-4 bg-slate-50 rounded-2xl border border-dashed border-slate-100 opacity-40 text-center">
+           <span class="text-[9px] font-black uppercase text-slate-400 italic">No modules active</span>
         </div>
 
         <!-- Extra Gamification Item -->
@@ -91,12 +89,13 @@ import { Router } from '@angular/router';
     }
   `]
 })
-export class SidebarComponent implements OnInit {
-  categories: any[] = [];
+export class SidebarComponent implements OnInit, OnDestroy {
+  modules: any[] = [];
   user: any = null;
+  private sub: Subscription = new Subscription();
 
   constructor(
-    private grammarService: GrammarService, 
+    private moduleService: ModuleService, 
     private authService: AuthService,
     private router: Router,
     private cd: ChangeDetectorRef
@@ -104,16 +103,21 @@ export class SidebarComponent implements OnInit {
 
   ngOnInit() {
     this.user = this.authService.getUser();
-    this.fetchCategories();
+    this.fetchModules();
+    
+    // Auto refresh when a new module is added from admin panel (experimental reactive update)
+    this.sub.add(
+      this.moduleService.moduleAdded$.subscribe(() => this.fetchModules())
+    );
   }
 
-  fetchCategories() {
-    this.grammarService.getCategories().subscribe({
+  fetchModules() {
+    this.moduleService.getModules().subscribe({
       next: (data) => {
-        this.categories = data || [];
-        this.cd.detectChanges(); // Use this to force display on load
+        this.modules = data || [];
+        this.cd.detectChanges();
       },
-      error: (err) => console.error('Error fetching categories', err)
+      error: (err) => console.error('Error fetching modules', err)
     });
   }
 
@@ -122,5 +126,9 @@ export class SidebarComponent implements OnInit {
       next: () => this.router.navigate(['/login']),
       error: () => this.router.navigate(['/login'])
     });
+  }
+
+  ngOnDestroy() {
+    this.sub.unsubscribe();
   }
 }

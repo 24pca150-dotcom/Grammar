@@ -4,7 +4,10 @@
 
 @layer base {
   body {
-    @apply bg-[#fcfcfc] text-slate-800 font-sans antialiased;
+    @apply bg-white text-slate-900 font-sans antialiased selection:bg-indigo-100;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-sans font-bold tracking-tight;
   }
 }
 

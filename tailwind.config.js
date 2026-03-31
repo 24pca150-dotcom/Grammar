@@ -11,6 +11,9 @@ module.exports = {
           DEFAULT: '#4f46e5', // Indigo 600
           dark: '#3730a3', // Indigo 800
         },
+        fontFamily: {
+          sans: ['Outfit', 'Inter', 'sans-serif'],
+        },
         slate: {
           50: '#f8fafc',
           100: '#f1f5f9',

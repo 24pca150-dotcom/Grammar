@@ -229,15 +229,28 @@ export class DashboardOverviewComponent implements AfterViewInit, OnInit {
   }
 
   private initAnimations() {
+    if (!isPlatformBrowser(this.platformId) || !this.header) return;
+
     const tl = gsap.timeline({ defaults: { ease: 'power4.out' } });
 
-    if (this.header) {
-      tl.to(this.header.nativeElement, { opacity: 1, y: 0, duration: 1 })
-        .to('.stat-card', { opacity: 1, y: 0, stagger: 0.2, duration: 0.8 }, '-=0.6')
-        .to('.section-title', { opacity: 1, y: 0, duration: 0.6 }, '-=0.4')
+    // Animate header always
+    tl.to(this.header.nativeElement, { opacity: 1, y: 0, duration: 1 });
+
+    // Animate stats cards always
+    tl.to('.stat-card', { opacity: 1, y: 0, stagger: 0.2, duration: 0.8 }, '-=0.6');
+
+    // Only animate category-dependent sections if categories exist
+    if (this.categories.length > 0) {
+      tl.to('.section-title', { opacity: 1, y: 0, duration: 0.6 }, '-=0.4')
         .to('.module-card', { opacity: 1, y: 0, stagger: 0.1, duration: 0.8 }, '-=0.3')
         .to('.chart-panel', { opacity: 1, y: 0, duration: 1 }, '-=0.5')
         .to('.goal-panel', { opacity: 1, x: 0, duration: 1 }, '-=0.8');
+    } else {
+      // Animate empty state if visible
+      tl.to('.section-title', { opacity: 1, y: 0, duration: 0.6 }, '-=0.4');
+      if (document.querySelector('.module-card')) {
+        tl.to('.module-card', { opacity: 1, y: 0, duration: 0.8 }, '-=0.3');
+      }
     }
   }
 }

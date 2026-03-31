@@ -58,9 +58,26 @@ export const routes: Routes = [
   // Admin Panel
   {
     path: 'admin',
-    loadComponent: () => import('./features/admin/admin-dashboard.component').then(m => m.AdminDashboardComponent),
+    loadComponent: () => import('./features/admin/admin-layout/admin-layout.component').then(m => m.AdminLayoutComponent),
     canActivate: [adminGuard],
     children: [
+      {
+        path: 'dashboard',
+        loadComponent: () => import('./features/admin/overview/overview.component').then(m => m.AdminOverviewComponent)
+      },
+      {
+        path: 'users',
+        loadComponent: () => import('./features/admin/user-management/user-management.component').then(m => m.UserManagementComponent)
+      },
+      {
+        path: 'modules',
+        loadComponent: () => import('./features/admin/modules/admin-modules.component').then(m => m.AdminModulesComponent)
+      },
+      {
+         path: '',
+         redirectTo: 'dashboard',
+         pathMatch: 'full'
+      }
     ]
   },
   {

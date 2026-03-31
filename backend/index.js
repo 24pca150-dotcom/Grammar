@@ -3,6 +3,7 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 const adminRoutes = require('./routes/adminRoutes');
 const authRoutes = require('./routes/authRoutes');
+const moduleRoutes = require('./routes/moduleRoutes');
 
 dotenv.config();
 
@@ -14,6 +15,7 @@ app.use(express.json());
 
 // Routes
 app.use('/api', authRoutes);
+app.use('/api', moduleRoutes);
 app.use('/api/admin', adminRoutes);
 
 // General API error handling
