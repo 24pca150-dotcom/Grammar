@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, ElementRef, ViewChild, Inject, PLATFORM_ID, OnInit } from '@angular/core';
+import { Component, AfterViewInit, ElementRef, ViewChild, Inject, PLATFORM_ID, OnInit, ChangeDetectorRef } from '@angular/core';
 import { isPlatformBrowser, CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { gsap } from 'gsap';
@@ -10,12 +10,12 @@ import { AuthService } from '../../../core/services/auth.service';
   standalone: true,
   imports: [RouterLink, CommonModule],
   template: `
-    <div class="flex flex-col gap-12 max-w-[1400px] mx-auto pb-20">
+    <div class="flex flex-col gap-4 max-w-[1300px] mx-auto pb-10">
       
       <!-- Top Profile Header -->
       <header #header class="flex flex-row justify-between items-center opacity-0 translate-y-[-10px]">
         <div>
-          <h1 class="text-4xl font-bold text-slate-900 mb-2 tracking-tight italic">Welcome back, {{ user?.name || 'Scholar' }}.</h1>
+          <h1 class="text-2xl font-bold text-slate-900 mb-2 tracking-tight italic">Welcome back, {{ user?.name || 'Scholar' }}.</h1>
           <p class="text-slate-500 font-semibold tracking-tight italic">You've mastered {{ completedCount }} modules so far.</p>
         </div>
         
@@ -31,9 +31,9 @@ import { AuthService } from '../../../core/services/auth.service';
       </header>
 
       <!-- Stats Grid -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
         <!-- Course Progress Card -->
-        <div class="stat-card bg-white p-8 rounded-[32px] border border-slate-50 shadow-sm relative opacity-0 translate-y-[20px]">
+        <div class="stat-card bg-white p-5 rounded-[22px] border border-slate-50 shadow-sm relative opacity-0 translate-y-[20px]">
            <div class="flex justify-between items-start mb-6">
               <span class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Course Progress</span>
               <span class="text-primary text-xl">
@@ -49,19 +49,19 @@ import { AuthService } from '../../../core/services/auth.service';
         </div>
 
         <!-- XP Card -->
-        <div class="stat-card bg-white p-8 rounded-[32px] border border-slate-50 shadow-sm opacity-0 translate-y-[20px]">
+        <div class="stat-card bg-white p-6 rounded-[28px] border border-slate-50 shadow-sm opacity-0 translate-y-[20px]">
            <div class="flex justify-between items-start mb-6">
               <span class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Total XP Earned</span>
               <span class="text-primary text-xl">🎖️</span>
            </div>
            <div class="flex flex-col gap-2">
-              <span class="text-4xl font-bold text-slate-900 tracking-tight italic">{{ totalXP }}</span>
+              <span class="text-2xl font-bold text-slate-900 tracking-tight italic">{{ totalXP }}</span>
               <span class="text-[10px] font-bold text-primary uppercase tracking-widest italic">Ranked Top #{{ (totalXP % 100) + 1 }}</span>
            </div>
         </div>
 
         <!-- Streak Card -->
-        <div class="stat-card bg-white p-8 rounded-[32px] border border-slate-50 shadow-sm opacity-0 translate-y-[20px]">
+        <div class="stat-card bg-white p-6 rounded-[28px] border border-slate-50 shadow-sm opacity-0 translate-y-[20px]">
            <div class="flex justify-between items-start mb-6">
               <span class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Current Streak</span>
               <span class="text-primary text-xl">🔥</span>
@@ -80,7 +80,7 @@ import { AuthService } from '../../../core/services/auth.service';
       <!-- Quick Access Modules -->
       <section>
          <div class="flex justify-between items-end mb-8 opacity-0 translate-y-[10px] section-title">
-            <h2 class="text-2xl font-black text-slate-900 tracking-tight uppercase italic">Target Modules</h2>
+            <h2 class="text-lg font-black text-slate-900 tracking-tight uppercase italic">Target Modules</h2>
             <p class="text-[10px] font-black uppercase text-slate-400 tracking-widest hidden md:block">Updated from Headquarters</p>
          </div>
 
@@ -117,12 +117,12 @@ import { AuthService } from '../../../core/services/auth.service';
       </section>
 
       <!-- Charts & Goals Section -->
-      <div class="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-12" *ngIf="categories.length > 0">
-         <!-- Daily Activity Placeholder -->
-         <section class="opacity-0 translate-y-[20px] chart-panel">
-            <div class="bg-white p-10 rounded-[32px] border border-slate-50 shadow-sm h-full">
-               <div class="flex justify-between items-center mb-12 border-b border-slate-50 pb-6">
-                  <h3 class="font-black text-slate-900 text-lg uppercase italic tracking-tight">Linguistic Metrics</h3>
+         <div class="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-6" *ngIf="categories.length > 0">
+            <!-- Daily Activity Placeholder -->
+            <section class="opacity-0 translate-y-[20px] chart-panel">
+               <div class="bg-white p-6 rounded-[24px] border border-slate-50 shadow-sm h-full">
+                  <div class="flex justify-between items-center mb-8 border-b border-slate-50 pb-4">
+                     <h3 class="font-black text-slate-900 text-md uppercase italic tracking-tight">Linguistic Metrics</h3>
                   <div class="flex items-center gap-2">
                      <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
                      <span class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] italic">Realtime Data</span>
@@ -143,7 +143,7 @@ import { AuthService } from '../../../core/services/auth.service';
 
          <!-- Mastery Goals Sidebar -->
          <section class="opacity-0 translate-x-[20px] goal-panel">
-            <div class="bg-slate-900 p-10 rounded-[32px] border-none shadow-2xl relative overflow-hidden group h-full">
+            <div class="bg-slate-900 p-6 rounded-[24px] border-none shadow-2xl relative overflow-hidden group h-full">
                <div class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] pointer-events-none"></div>
                <div class="relative z-10">
                  <h3 class="font-black text-white text-lg mb-8 uppercase italic tracking-tight border-b border-white/5 pb-4">Special Ops</h3>
@@ -195,7 +195,8 @@ export class DashboardOverviewComponent implements AfterViewInit, OnInit {
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
     private grammarService: GrammarService,
-    private authService: AuthService
+    private authService: AuthService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
@@ -213,6 +214,7 @@ export class DashboardOverviewComponent implements AfterViewInit, OnInit {
     this.grammarService.getCategories().subscribe({
       next: (data) => {
         this.categories = data;
+        this.cdr.detectChanges();
         // Re-trigger animation if data comes later
         if (isPlatformBrowser(this.platformId)) {
           setTimeout(() => this.initAnimations(), 100);

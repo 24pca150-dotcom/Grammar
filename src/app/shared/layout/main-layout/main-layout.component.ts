@@ -11,9 +11,9 @@ import { SidebarComponent } from '../../components/sidebar/sidebar.component';
     <div class="flex min-h-screen bg-white">
       <app-sidebar></app-sidebar>
       
-      <div class="flex-1 ml-0 lg:ml-[280px] flex flex-col min-h-screen">
+      <div class="flex-1 ml-0 lg:ml-[240px] flex flex-col min-h-screen">
         <!-- Dashboard Top Header (Integrated) -->
-        <main class="flex-1 p-6 lg:p-14 bg-white min-h-screen overflow-x-hidden">
+        <main class="flex-1 p-6 lg:p-10 bg-white min-h-screen overflow-x-hidden">
           <router-outlet></router-outlet>
         </main>
 

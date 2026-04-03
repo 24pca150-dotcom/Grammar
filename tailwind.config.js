@@ -5,14 +5,14 @@ module.exports = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ['"Times New Roman"', 'Times', 'serif'],
+      },
       colors: {
         primary: {
           light: '#6366f1', // Indigo 500
           DEFAULT: '#4f46e5', // Indigo 600
           dark: '#3730a3', // Indigo 800
-        },
-        fontFamily: {
-          sans: ['Outfit', 'Inter', 'sans-serif'],
         },
         slate: {
           50: '#f8fafc',

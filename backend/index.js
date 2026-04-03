@@ -4,6 +4,7 @@ const dotenv = require('dotenv');
 const adminRoutes = require('./routes/adminRoutes');
 const authRoutes = require('./routes/authRoutes');
 const moduleRoutes = require('./routes/moduleRoutes');
+const grammarRoutes = require('./routes/grammarRoutes');
 
 dotenv.config();
 
@@ -16,6 +17,7 @@ app.use(express.json());
 // Routes
 app.use('/api', authRoutes);
 app.use('/api', moduleRoutes);
+app.use('/api', grammarRoutes);
 app.use('/api/admin', adminRoutes);
 
 // General API error handling

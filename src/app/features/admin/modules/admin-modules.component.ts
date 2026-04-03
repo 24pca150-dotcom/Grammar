@@ -8,18 +8,18 @@ import { ModuleService } from '../../../core/services/module.service';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   template: `
-    <div class="p-12 max-w-[1400px] mx-auto min-h-screen bg-slate-50 relative overflow-hidden">
-      <header class="mb-14">
-        <h1 class="text-4xl font-black text-slate-900 mb-2 uppercase italic tracking-tight underline decoration-primary/20 decoration-8 underline-offset-8">Module Management</h1>
-        <p class="text-slate-500 font-bold text-[14px] uppercase tracking-widest italic opacity-50">Create and monitor linguistic training clusters.</p>
+    <div class="p-5 max-w-[1300px] mx-auto min-h-screen bg-slate-50 relative overflow-hidden">
+      <header class="mb-6">
+        <h1 class="text-2xl font-black text-slate-900 mb-2 uppercase tracking-tight underline decoration-primary/20 decoration-8 underline-offset-8">Module Management</h1>
+        <p class="text-slate-500 font-bold text-[11px] uppercase tracking-widest opacity-50">Create and monitor linguistic training clusters.</p>
       </header>
 
-      <div class="grid grid-cols-1 lg:grid-cols-[1fr_400px] gap-12">
+      <div class="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-4">
         <!-- Module List -->
-        <section class="bg-white rounded-2xl border border-slate-200 shadow-sm p-8">
-          <div class="flex justify-between items-center mb-8 border-b border-slate-100 pb-4">
-            <h3 class="text-xl font-bold text-slate-800">Available Modules</h3>
-            <span class="text-xs font-semibold bg-slate-100 text-slate-500 px-3 py-1 rounded-full">{{ modules.length }} Total</span>
+        <section class="bg-white rounded-[20px] border border-slate-200 shadow-sm p-5">
+          <div class="flex justify-between items-center mb-4 border-b border-slate-100 pb-3">
+            <h3 class="text-md font-bold text-slate-800">Available Modules</h3>
+            <span class="text-[9px] font-semibold bg-slate-100 text-slate-500 px-3 py-0.5 rounded-full">{{ modules.length }} Total</span>
           </div>
           
           <div class="flex flex-col gap-3">
@@ -44,9 +44,9 @@ import { ModuleService } from '../../../core/services/module.service';
 
         <!-- Normal Create Form -->
         <section>
-           <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm">
-              <h2 class="text-lg font-bold text-slate-800 mb-2">Create New Module</h2>
-              <p class="text-xs text-slate-500 mb-8 font-medium">Add a new learning category to the student dashboard.</p>
+          <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+            <h2 class="text-md font-bold text-slate-800 mb-2">Create New Module</h2>
+            <p class="text-[11px] text-slate-500 mb-6 font-medium">Add a new learning category to the student dashboard.</p>
 
               <form [formGroup]="moduleForm" (ngSubmit)="onCreate()" class="flex flex-col gap-5">
                  <div class="flex flex-col gap-2">

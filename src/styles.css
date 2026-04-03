@@ -2,13 +2,24 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+  font-size: 14px !important;
+}
+
 @layer base {
+  * {
+    font-family: 'Times New Roman', Times, serif !important;
+    font-style: normal !important;
+  }
   body {
-    @apply bg-white text-slate-900 font-sans antialiased selection:bg-indigo-100;
+    @apply bg-white text-slate-900 antialiased selection:bg-indigo-100 text-sm;
+    font-family: 'Times New Roman', Times, serif !important;
+    font-style: normal !important;
   }
-  h1, h2, h3, h4, h5, h6 {
-    @apply font-sans font-bold tracking-tight;
-  }
+  h1 { @apply text-2xl font-black tracking-tight mb-4; font-style: normal !important; }
+  h2 { @apply text-xl font-bold tracking-tight mb-3; font-style: normal !important; }
+  h3 { @apply text-lg font-bold tracking-tight mb-2; font-style: normal !important; }
+  h4, h5, h6 { @apply font-bold tracking-tight; font-style: normal !important; }
 }
 
 @layer components {

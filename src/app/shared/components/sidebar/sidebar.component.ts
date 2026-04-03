@@ -11,8 +11,8 @@ import { Subscription } from 'rxjs';
   standalone: true,
   imports: [RouterLink, RouterLinkActive, CommonModule],
   template: `
-    <aside class="fixed left-0 top-0 w-[280px] h-screen flex flex-col z-[100] border-r border-slate-100 p-8 bg-white overflow-y-auto">
-      <div class="mb-12">
+    <aside class="fixed left-0 top-0 w-[240px] h-screen flex flex-col z-[100] border-r border-slate-100 p-6 bg-white overflow-y-auto">
+      <div class="mb-8">
         <div class="flex items-center gap-3 mb-1">
           <div class="w-8 h-8 bg-primary text-white rounded-md flex items-center justify-center text-xl font-bold font-sans shadow-lg shadow-indigo-500/20">G</div>
           <span class="text-xl font-black text-slate-900 tracking-tighter uppercase italic">Grammar App</span>
@@ -73,7 +73,7 @@ import { Subscription } from 'rxjs';
   `,
   styles: [`
     .sidebar-nav-item {
-      @apply flex items-center gap-4 py-3 px-4 rounded-xl text-slate-500 font-bold text-sm transition-all hover:bg-slate-50 hover:text-slate-900;
+      @apply flex items-center gap-4 py-2.5 px-3 rounded-xl text-slate-500 font-bold text-sm transition-all hover:bg-slate-50 hover:text-slate-900;
     }
     .sidebar-nav-item.active {
       @apply bg-indigo-50 text-primary;
